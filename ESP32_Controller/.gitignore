@@ -1,0 +1,38 @@
+# PlatformIO
+ESP32_Controller/.pio/
+ESP32_Controller/.pioenvs/
+ESP32_Controller/.piolibdeps/
+ESP32_Controller/platformio.ini.local
+ESP32_Controller/private.ini
+
+# Node.js
+web_app/node_modules/
+web_app/npm-debug.log
+web_app/.env
+web_app/.env.local
+
+# Serial logs
+serial_log/*.log
+serial_log/*.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Build artifacts
+**/*.bin
+**/*.hex
+**/*.elf
+
+# KiCad backups
+**/*-backup-*
+**/*.kicad_prl
+**/*.kicad_pro
+**/*.kicad_wks

@@ -1,0 +1,21 @@
+# PlatformIO
+ESP32_Controller/.pio/
+ESP32_Controller/.pioenvs/
+ESP32_Controller/.piolibdeps/
+ESP32_Controller/.vscode/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Node.js
+web_app/node_modules/
+web_app/npm-debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PlatformIO project files
+ESP32_Controller/platformio.ini.local
+ESP32_Controller/private.ini
