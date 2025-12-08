@@ -1,6 +1,13 @@
 # Filament sensor and controller
 
-## Sensors
+## Filament Sensors
+
+Using an IR slot sensor, commonly used for a speed / position sensor, can run at 3.3v or 5v.<br/>
+Output is via LM393 voltage comparator producing a stable digital output wit +VCC being open and 0V closed.
+
+STL files to print 3D printed casings can be found here [STL Files](hardware_optical_sensor)
+
+![Sensor module](images/IR_Sensor_module.png)
 
 ## Controller
 
