@@ -6,8 +6,21 @@
 #define SENSOR_4_PIN     5
 
 // NeoPixel LED Strip (6 LEDs for status indication)
-#define NEOPIXEL_PIN      0
+#define NEOPIXEL_PIN      2
 #define NUM_NEOPIXELS     6
+
+// Colors
+#define COLOR_SENSOR_OK   strip.Color(0, 255, 0)   // Green
+#define COLOR_SENSOR_FAIL strip.Color(255, 0, 0)   // Red
+
+#define NEOPIXEL_NETWORK  0
+#define NEOPIXEL_ALARM    1
+#define NEOPIXEL_SENSOR1  2
+#define NEOPIXEL_SENSOR2  3
+#define NEOPIXEL_SENSOR3  4
+#define NEOPIXEL_SENSOR4  5
+
+#define STATUS_LED_PIN 8
 
 // Piezo Buzzer
 #define BUZZER_PIN        1
@@ -23,8 +36,3 @@
 //               │
 //              GND
 #define MODE_SWITCH_PIN   4  // GPIO4 - ADC1_CH3 (0-3.3V analog input)
-
-// Status LED
-#define STATUS_LED_PIN    8  // GPIO8 - Built-in blue LED
-
-

@@ -23,8 +23,8 @@ CONNECTIONS:
 - GND → Common Ground
 - 3V3 → 3.3V Output (for sensors)
 - GPIO4 → Mode Switch (ADC input)
-- GPIO1 → Buzzer Output
-- GPIO0 → NeoPixel Data
+- GPIO3 → Buzzer Output
+- GPIO2 → NeoPixel Data
 - GPIO5 → Sensor 4 Signal
 - GPIO10 → Sensor 3 Signal
 - GPIO20 → Sensor 1 Signal

@@ -14,7 +14,6 @@ void loop1second();
 void loop1minute();
 void loop15minute();
 void loop60minute();
-void updateSensors();
 
 // Initialize the Neopixel strip with Adafruit NeoPixel
 Adafruit_NeoPixel strip(NUM_NEOPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
@@ -44,18 +43,21 @@ void setup() {
     // Initialize epoch tracking
     global.epoch.lastSecondEpoch = millis();
     Serial.begin(115200);
-    delay(2000); // Wait for serial
     
     // Initialize NeoPixel strip
     strip.begin();
-    strip.setBrightness(25); // Set brightness out of 255
-    strip.show();
+    strip.setBrightness(50); // Set brightness to 50 out of 255
+    strip.show(); // Initialize all pixels to 'off'
     
     // Initial test pattern
     Serial.println("Initializing system...");
     setPixelColor(NEOPIXEL_NETWORK, 255, 0, 0); // Red for boot
     strip.show();
     delay(1000);
+    
+    // Initialize built-in LED
+    pinMode(LED_BUILTIN, OUTPUT);
+    // digitalWrite(LED_BUILTIN, LOW);  // Start with LED off
     
     // Initialize sensor pins
     pinMode(SENSOR_1_PIN, INPUT_PULLUP);
@@ -88,7 +90,7 @@ void setup() {
     Serial.printf("CPU Frequency: %d MHz\n", ESP.getCpuFreqMHz());
     Serial.printf("Flash Size: %d MB\n", ESP.getFlashChipSize() / (1024 * 1024));
     Serial.printf("Free Heap: %d bytes\n", ESP.getFreeHeap());
-    Serial.printf("Built-in LED Pin: GPIO%d (using PWM)\n", STATUS_LED_PIN);
+    Serial.printf("LED Pin: GPIO%d\n", LED_BUILTIN);
     Serial.printf("NeoPixel Pin: GPIO%d\n", NEOPIXEL_PIN);
     Serial.println("System initialized successfully!");
     Serial.println("Press Ctrl+C to stop monitor");
@@ -97,7 +99,6 @@ void setup() {
 
 void loop() {
     unsigned long currentMillis = millis();
-    
     // 100ms tasks
     static unsigned long last100ms = 0;
     if (currentMillis - last100ms >= 100) {
@@ -137,22 +138,22 @@ void loop() {
 }
 
 void loop100ms() {
-
-}
-
-void loop1second() {
-    uint8_t s1 = digitalRead(SENSOR_1_PIN);
-    Serial.printf(" %i ", s1);
-    updateSensors();
-
     // Update sensor LEDs
-    setPixelColor(NEOPIXEL_SENSOR1, global.sensors.s1_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
-    setPixelColor(NEOPIXEL_SENSOR2, global.sensors.s2_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
-    setPixelColor(NEOPIXEL_SENSOR3, global.sensors.s3_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
-    setPixelColor(NEOPIXEL_SENSOR4, global.sensors.s4_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
+    setPixelColor(NEOPIXEL_SENSOR1, strip.Color(50, 0, 0));
+    setPixelColor(NEOPIXEL_SENSOR2, strip.Color(50, 0, 0));
+    setPixelColor(NEOPIXEL_SENSOR3, strip.Color(50, 0, 0));
+    setPixelColor(NEOPIXEL_SENSOR4, strip.Color(50, 0, 0));
+
 
     // Update NeoPixels
     strip.show();
+}
+
+void loop1second() {
+    // Blink built-in LED
+    uint8_t blink = global.epoch.lastSecondEpoch%2;
+    digitalWrite(LED_BUILTIN, blink);
+    Serial.printf(" %i ",blink);
 }
 
 void loop1minute() {
@@ -165,11 +166,4 @@ void loop15minute() {
 
 void loop60minute() {
     Serial.println("[Hour] Hourly maintenance");
-}
-
-void updateSensors(){
-    global.sensors.s1_state = digitalRead(SENSOR_1_PIN);
-    global.sensors.s2_state = digitalRead(SENSOR_2_PIN);
-    global.sensors.s3_state = digitalRead(SENSOR_3_PIN);
-    global.sensors.s4_state = digitalRead(SENSOR_4_PIN);
 }
