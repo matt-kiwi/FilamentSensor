@@ -11,6 +11,8 @@ STL files to print 3D printed casings can be found here [STL Files](hardware_opt
 
 ## Controller
 
+Hardware files, 3D print STL files, and laser cut SVGs can be found here [STL Files](hardware_ESP32_controller)
+
 ESP32 C3 Super Mini
 
 ![ESP32 Super mini pinout ](images/pinout_ESP32_supermini.png)
