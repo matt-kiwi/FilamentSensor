@@ -15,6 +15,10 @@ STL files to print 3D printed casings can be found here [STL Files](hardware_opt
 
 ![Sensor module](images/IR_Sensor_module.png)
 
+Completed sensors with 3D printed housing
+
+![](images/SensorPhoto1.png) ![](images/SensorPhoto2.png)
+
 ## Controller
 
 Hardware files, 3D print STL files, and laser cut SVGs can be found here [STL Files](hardware_ESP32_controller)
