@@ -1,5 +1,11 @@
 # Filament sensor and controller
 
+## Project summary / purpose
+
+Used in the manufacturing process of making and recycling plastic. Specifically to detect if a strand of filament has been broken, then alert the operator with an audio alarm.
+
+![Filament Controller and Sensors](images/FilamentControllerAndSensors.png)
+
 ## Filament Sensors
 
 Using an IR slot sensor, commonly used for a speed / position sensor, can run at 3.3v or 5v.<br/>
