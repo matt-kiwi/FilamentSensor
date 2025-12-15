@@ -1,0 +1,36 @@
+{
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "editor.formatOnSave": true,
+  
+  // PlatformIO settings
+  "platformio-ide.autoDetectedProject": "ESP32_Controller",
+  "platformio-ide.useBuiltinPython": false,
+  "platformio-ide.useDevelopmentPIOCore": true,
+  
+  // C/C++ settings
+  "C_Cpp.default.configurationProvider": "ms-vscode.cpptools",
+  
+  // File associations
+  "files.associations": {
+    "*.ino": "cpp",
+    "*.pde": "cpp"
+  },
+  
+  // Exclude folders from search
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.pio": true,
+    "**/.git": true,
+    "serial_log/**": true
+  },
+  
+  // Terminal settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh",
+      "icon": "terminal"
+    }
+  }
+}

@@ -22,8 +22,8 @@
 
 #define STATUS_LED_PIN 8
 
-// Piezo Buzzer
-#define BUZZER_PIN        1
+// Audio out / RTTTL pin
+#define PIN_AUDIO_OUT        3
 
 // 3-Position Mode Switch (Resistor Ladder to Single ADC)
 // Positions: NORMAL, ALARM_OFF, SETUP

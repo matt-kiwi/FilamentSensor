@@ -5,8 +5,6 @@ ESP32_Controller/.piolibdeps/
 ESP32_Controller/.vscode/
 
 # VS Code
-.vscode/
-*.code-workspace
 
 # Node.js
 web_app/node_modules/

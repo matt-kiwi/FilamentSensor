@@ -3,6 +3,8 @@
 #include "LittleFS.h"
 #include "stdint.h"
 #include <Adafruit_NeoPixel.h>
+#include "RTTTLPlayer.h"
+#include <RTTTLTunes.h>
 
 // Custom includes
 #include "config.h"
@@ -19,6 +21,7 @@ void updateSensors();
 // Initialize the Neopixel strip with Adafruit NeoPixel
 Adafruit_NeoPixel strip(NUM_NEOPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 global_t global;
+RTTTLPlayer player(PIN_AUDIO_OUT, 100);
 
 // Helper functions for NeoPixels
 void setPixelColor(uint8_t pixel, uint8_t r, uint8_t g, uint8_t b) {
@@ -41,14 +44,20 @@ void clearPixels() {
 }
 
 void setup() {
-    // Initialize epoch tracking
     global.epoch.lastSecondEpoch = millis();
     Serial.begin(115200);
+    player.begin();
+    player.setDebug(true);
+    player.play(RTTTLTunes::marioPowerUp);
+    while( player.isPlaying() ){
+        player.loop();
+        delay(10);
+    }
     delay(2000); // Wait for serial
     
     // Initialize NeoPixel strip
     strip.begin();
-    strip.setBrightness(25); // Set brightness out of 255
+    strip.setBrightness(25);
     strip.show();
     
     // Initial test pattern
@@ -63,10 +72,7 @@ void setup() {
     pinMode(SENSOR_3_PIN, INPUT_PULLUP);
     pinMode(SENSOR_4_PIN, INPUT_PULLUP);
     
-    // Initialize buzzer pin
-    pinMode(BUZZER_PIN, OUTPUT);
-    digitalWrite(BUZZER_PIN, LOW);
-    
+
     // Initialize mode switch (ADC input)
     pinMode(MODE_SWITCH_PIN, INPUT);
     
@@ -97,7 +103,6 @@ void setup() {
 
 void loop() {
     unsigned long currentMillis = millis();
-    
     // 100ms tasks
     static unsigned long last100ms = 0;
     if (currentMillis - last100ms >= 100) {
@@ -137,6 +142,7 @@ void loop() {
 }
 
 void loop100ms() {
+    player.loop();
 
 }
 
