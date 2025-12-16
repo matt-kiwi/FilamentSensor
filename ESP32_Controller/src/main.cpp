@@ -50,6 +50,11 @@ void setup() {
     Serial.begin(115200);
     pinMode(PIN_MODE_SWITCH, INPUT_PULLUP);
     readModeSwitch();
+    // Initialize NeoPixel strip
+    strip.begin();
+    strip.setBrightness(25);
+    setPixelColor(NEOPIXEL_ALARM, COLOR_PRE_BOOT);
+    strip.show();
     player.begin();
     player.setDebug(false);
     player.play(RTTTLTunes::marioPowerUp);
@@ -58,35 +63,17 @@ void setup() {
         delay(10);
     }
     delay(2000); // Wait for serial
-    
-    // Initialize NeoPixel strip
-    strip.begin();
-    strip.setBrightness(25);
-    strip.show();
-    
-    // Initial test pattern
     Serial.println("Initializing system...");
-    setPixelColor(NEOPIXEL_NETWORK, 255, 0, 0); // Red for boot
-    strip.show();
-    delay(1000);
     
     // Initialize sensor pins
-    pinMode(SENSOR_1_PIN, INPUT_PULLUP);
-    pinMode(SENSOR_2_PIN, INPUT_PULLUP);
-    pinMode(SENSOR_3_PIN, INPUT_PULLUP);
-    pinMode(SENSOR_4_PIN, INPUT_PULLUP);
-    
-
-    // Clear NeoPixels and set initial status
-    clearPixels();
-    // Network LED: Blue pulsing (searching for network)
-    setPixelColor(NEOPIXEL_NETWORK, 0, 0, 100);
-    strip.show();
+    pinMode(PIN_SENSOR_1, INPUT_PULLUP);
+    pinMode(PIN_SENSOR_2, INPUT_PULLUP);
+    pinMode(PIN_SENSOR_3, INPUT_PULLUP);
+    pinMode(PIN_SENSOR_4, INPUT_PULLUP);
     
     // Print welcome message
     Serial.println("\n\n=================================");
-    Serial.println("ESP32-C3 Super Mini Controller");
-    Serial.println("Using Adafruit NeoPixel Library");
+    Serial.println("Filament Sensor by Econode ");
     Serial.println("=================================");
     
     // Print system info
@@ -95,10 +82,8 @@ void setup() {
     Serial.printf("CPU Frequency: %d MHz\n", ESP.getCpuFreqMHz());
     Serial.printf("Flash Size: %d MB\n", ESP.getFlashChipSize() / (1024 * 1024));
     Serial.printf("Free Heap: %d bytes\n", ESP.getFreeHeap());
-    Serial.printf("Built-in LED Pin: GPIO%d (using PWM)\n", STATUS_LED_PIN);
     Serial.printf("NeoPixel Pin: GPIO%d\n", NEOPIXEL_PIN);
     Serial.println("System initialized successfully!");
-    Serial.println("Press Ctrl+C to stop monitor");
     Serial.println("=================================\n");
 }
 
@@ -149,18 +134,31 @@ void loop100ms() {
 
 void loop1second() {
     readModeSwitch();
-    Serial.printf("modeSwitchRaw: %i  alarm:%d setup:%d hasChanged:%d\n", global.modeSwitch.raw, global.modeSwitch.alarm, global.modeSwitch.setup, global.modeSwitch.hasChanged);
+    if( global.modeSwitch.alarm == 0 && player.isPlaying() ) player.stop();
     if( global.modeSwitch.hasChanged ) global.modeSwitch.hasChanged = 0;
     updateSensors();
 
     // Update sensor LEDs
+    setPixelColor(NEOPIXEL_ALARM, global.sensors.alarm?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
     setPixelColor(NEOPIXEL_SENSOR1, global.sensors.s1_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
     setPixelColor(NEOPIXEL_SENSOR2, global.sensors.s2_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
     setPixelColor(NEOPIXEL_SENSOR3, global.sensors.s3_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
     setPixelColor(NEOPIXEL_SENSOR4, global.sensors.s4_state?COLOR_SENSOR_FAIL:COLOR_SENSOR_OK);
-
+    
+    if( global.sensors.hasChanged ){
+        if( global.sensors.alarm ){
+            if( global.modeSwitch.alarm ){
+                player.stop();
+                player.play( RTTTLTunes::error, 255);
+            }
+            global.sensors.hasChanged = false;
+        } else {
+            player.stop();
+        }
+    }
     // Update NeoPixels
     strip.show();
+    yield();
 }
 
 void loop1minute() {
@@ -176,10 +174,26 @@ void loop60minute() {
 }
 
 void updateSensors(){
-    global.sensors.s1_state = digitalRead(SENSOR_1_PIN);
-    global.sensors.s2_state = digitalRead(SENSOR_2_PIN);
-    global.sensors.s3_state = digitalRead(SENSOR_3_PIN);
-    global.sensors.s4_state = digitalRead(SENSOR_4_PIN);
+    uint8_t s1_state = digitalRead(PIN_SENSOR_1);
+    uint8_t s2_state = digitalRead(PIN_SENSOR_2);
+    uint8_t s3_state = digitalRead(PIN_SENSOR_3);
+    uint8_t s4_state = digitalRead(PIN_SENSOR_4);
+    uint8_t hasChanged = 0;
+    uint8_t alarm,all_off;
+    
+    if( global.sensors.s1_state != s1_state ||  global.sensors.s2_state != s2_state || 
+        global.sensors.s3_state != s3_state ||  global.sensors.s4_state != s4_state) hasChanged = 1;
+    global.sensors.hasChanged = hasChanged;
+    if( hasChanged ){
+        global.sensors.s1_state = s1_state;
+        global.sensors.s2_state = s2_state;
+        global.sensors.s3_state = s3_state;
+        global.sensors.s4_state = s4_state;
+    }
+    all_off = s1_state == 0 &&  s2_state == 0 && s3_state == 0 && s4_state == 0;
+    global.sensors.all_off = all_off;
+    alarm = !all_off;
+    global.sensors.alarm = alarm;
 }
 
 void readModeSwitch(){
@@ -188,10 +202,10 @@ void readModeSwitch(){
  Two switches on a resistor ladder as follows
 
 3.3V ─── 47kΩ ─── GPIO4 ──┬── 22kΩ ── SWITCH A ── GND
-                           │
-                          10kΩ
-                           │
-                           + ── SWITCH B ── GND
+                          │
+                         10kΩ
+                          │
+                          + ── SWITCH B ── GND
 None: 4095
 Switch A (22kΩ): 1434
 Switch B (10kΩ): 780

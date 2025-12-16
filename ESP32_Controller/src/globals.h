@@ -19,6 +19,10 @@ struct global_sensors_t {
     uint8_t s2_state;
     uint8_t s3_state;
     uint8_t s4_state;
+    uint8_t all_off;
+    uint8_t alarm;
+    uint8_t hasChanged;
+    uint32_t lastChangeEpoch;
 };
 
 // Global variable storage
