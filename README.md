@@ -10,18 +10,48 @@ Used in the manufacturing process of making and recycling plastic. Specifically 
 
 This device is dedicated to Bill and Eva of KiwiFil plastics in New Zealand. And their pioneering work with plastics recycling.
 
+## Usage and wiring
+
+![Filamanet controller with labels](images/FilamentSensorControllerLayout.png)
+
+### Wiring
+
+- Remove top lid with finger screws.
+- Pull out switch block assembly / cable entry plate.
+- Connect all 4 filament sensors using screw terminals, if a sensor is missing bridge Ground and Sensor input (Yellow).
+- Install switch block assembly aligning sensor cables in combe/clamp.
+- Install top lid
+
+### Usage
+
+Controller is powered by USB/5v some USB-C PD power supplies may not work.<br/>
+Turn on power switch, during boot up the first LED will be blue, and a power up tune will be played.
+
+\*\* One day when the WiFi software has been written the WiFi setup switch will enable configuring the WiFi
+
+The "Alarm mode" switch enables or disables the audible alarm.
+
+The alarm will sound when any of the sensors fail to detect filament.<br >
+LEDs
+
+- Alarm: Red in alarm, Green no alarm
+- Sensors 1 - 4: Red in alarm, Green no alarm
+
+Adjusting the volume, the underside of the controller has a 2 Watt speaker and volume control, turn clockwise to increase the volume.
+![Speaker and volume](images/FilamentSensorControllerUnderSide.png)
+
 ## Filament Sensors
 
 Using an IR slot sensor, commonly used for a speed / position sensor, can run at 3.3v or 5v.<br/>
-Output is via LM393 voltage comparator producing a stable digital output wit +VCC being open and 0V closed.
-
-STL files to print 3D printed casings can be found here [STL Files](hardware_optical_sensor)
+Output is via LM393 voltage comparator producing a stable digital output with +VCC being open and 0V closed.
 
 ![Sensor module](images/IR_Sensor_module.png)
 
-Completed sensors with 3D printed housing
+STL files to print 3D printed casings can be found here [STL Files](hardware_optical_sensor)<br />
+![STL image sensor top](images/SensorPhotoTop_STL.png) ![STL image sensor base](images/SensorPhotoBase_STL.png)<br />
 
-![](images/SensorPhoto1.png) ![](images/SensorPhoto2.png)
+Completed sensors with 3D printed housing<br />
+![](images/SensorPhoto1.png)![](images/SensorPhoto2.png)
 
 ## Controller
 
