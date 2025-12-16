@@ -8,6 +8,7 @@
 
 // Custom includes
 #include "config.h"
+#include "utils.h"
 #include "globals.h"
 
 // Forward declarations
@@ -17,6 +18,7 @@ void loop1minute();
 void loop15minute();
 void loop60minute();
 void updateSensors();
+void readModeSwitch();
 
 // Initialize the Neopixel strip with Adafruit NeoPixel
 Adafruit_NeoPixel strip(NUM_NEOPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
@@ -46,8 +48,10 @@ void clearPixels() {
 void setup() {
     global.epoch.lastSecondEpoch = millis();
     Serial.begin(115200);
+    pinMode(PIN_MODE_SWITCH, INPUT_PULLUP);
+    readModeSwitch();
     player.begin();
-    player.setDebug(true);
+    player.setDebug(false);
     player.play(RTTTLTunes::marioPowerUp);
     while( player.isPlaying() ){
         player.loop();
@@ -73,9 +77,6 @@ void setup() {
     pinMode(SENSOR_4_PIN, INPUT_PULLUP);
     
 
-    // Initialize mode switch (ADC input)
-    pinMode(MODE_SWITCH_PIN, INPUT);
-    
     // Clear NeoPixels and set initial status
     clearPixels();
     // Network LED: Blue pulsing (searching for network)
@@ -147,8 +148,9 @@ void loop100ms() {
 }
 
 void loop1second() {
-    uint8_t s1 = digitalRead(SENSOR_1_PIN);
-    Serial.printf(" %i ", s1);
+    readModeSwitch();
+    Serial.printf("modeSwitchRaw: %i  alarm:%d setup:%d hasChanged:%d\n", global.modeSwitch.raw, global.modeSwitch.alarm, global.modeSwitch.setup, global.modeSwitch.hasChanged);
+    if( global.modeSwitch.hasChanged ) global.modeSwitch.hasChanged = 0;
     updateSensors();
 
     // Update sensor LEDs
@@ -178,4 +180,31 @@ void updateSensors(){
     global.sensors.s2_state = digitalRead(SENSOR_2_PIN);
     global.sensors.s3_state = digitalRead(SENSOR_3_PIN);
     global.sensors.s4_state = digitalRead(SENSOR_4_PIN);
+}
+
+void readModeSwitch(){
+/*
+
+ Two switches on a resistor ladder as follows
+
+3.3V ─── 47kΩ ─── GPIO4 ──┬── 22kΩ ── SWITCH A ── GND
+                           │
+                          10kΩ
+                           │
+                           + ── SWITCH B ── GND
+None: 4095
+Switch A (22kΩ): 1434
+Switch B (10kΩ): 780
+Both: 570
+*/
+    uint16_t modeSwitchRaw = analogRead(PIN_MODE_SWITCH);
+    bool modeSwitchSetup = false, modeSwitchAlarm = false;
+    // Switch 1 logic - Alarm switch
+    if( (modeSwitchRaw>1200 && modeSwitchRaw<1600) || (modeSwitchRaw>500 && modeSwitchRaw<600) ) modeSwitchAlarm = true;
+    // Switch 2 logic - Setup switch
+    if( (modeSwitchRaw>720 && modeSwitchRaw<820) || (modeSwitchRaw>500 && modeSwitchRaw<600) ) modeSwitchSetup = true;
+    global.modeSwitch.hasChanged = global.modeSwitch.alarm != modeSwitchAlarm || global.modeSwitch.setup != modeSwitchSetup;
+    global.modeSwitch.raw = modeSwitchRaw;
+    global.modeSwitch.alarm = modeSwitchAlarm;
+    global.modeSwitch.setup = modeSwitchSetup;
 }

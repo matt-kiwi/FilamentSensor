@@ -35,4 +35,4 @@
 //   SETUP ────── 5kΩ ───┘
 //               │
 //              GND
-#define MODE_SWITCH_PIN   4  // GPIO4 - ADC1_CH3 (0-3.3V analog input)
+#define PIN_MODE_SWITCH  4  // GPIO4 - ADC1_CH3 (0-3.3V analog input)
