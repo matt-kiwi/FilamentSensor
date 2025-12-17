@@ -17,3 +17,28 @@ Thumbs.db
 # PlatformIO project files
 ESP32_Controller/platformio.ini.local
 ESP32_Controller/private.ini
+
+# KiCAD files
+# Auto-save files
+*#auto_saved_files#*
+*~*
+
+# Backup files
+*.bak
+*.bck
+*-backups/
+
+# Lock files
+*.lck
+
+# Cache and temporary files
+*.cache
+*.tmp
+
+# KiCAD specific temporary files
+*.kicad_prl
+*.kicad_prl~
+*-save.pro
+*-save.kicad_pcb
+*-save.kicad_sch
+fp-info-cache
