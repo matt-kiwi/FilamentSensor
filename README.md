@@ -75,6 +75,11 @@ CONNECTIONS:
 - GPIO21 → Sensor 2 Signal
 - GPIO8 → Status LED (built-in)
 
+## Schematic ( Vero Board prototype )
+
+Schematic PDF File here: [FilamentSensorProjectVeroBoard.pdf](docs/FilamentSensorProjectVeroBoard.pdf)<br />
+![Board Schematic](images/FilamentControlerVeroBoardSchematic.png)
+
 ## Sound / Alarm
 
 Alarm will sound when any of the 4 sensors don't detect any filament.<br />
