@@ -64,9 +64,6 @@ void setup() {
     Serial.begin(115200);
     delay(2000);
     // Print welcome message and system info first
-    Serial.println("LOG TEST: before LOG_I");
-    LOG_I("MAIN", "LOG TEST: inside LOG_I");
-    Serial.println("LOG TEST: after LOG_I");
     LOG_I("MAIN", "Initializing system...");
     LOG_I("MAIN", "=================================");
     LOG_I("MAIN", "Filament Sensor by Econode");

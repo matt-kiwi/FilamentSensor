@@ -50,9 +50,6 @@ Press enter twice to see menu options.
 
 ```TEXT
 Reconnecting to /dev/cu.usbmodem1201 ...         Connected!
-LOG TEST: before LOG_I
-[I][MAIN] LOG TEST: inside LOG_I
-LOG TEST: after LOG_I
 [I][MAIN] Initializing system...
 [I][MAIN] =================================
 [I][MAIN] Filament Sensor by Econode
