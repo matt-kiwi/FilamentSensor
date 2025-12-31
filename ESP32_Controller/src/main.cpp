@@ -2,7 +2,11 @@
 #include <WiFi.h>
 #include "LittleFS.h"
 #include "stdint.h"
+#define ECONODE_FILE_LOG_LEVEL 4
 #include <Adafruit_NeoPixel.h>
+#include "econode_logging.h"
+// Set per-file log level to DEBUG
+#define ECONODE_FILE_LOG_LEVEL 4
 #include "RTTTLPlayer.h"
 #include <RTTTLTunes.h>
 
@@ -48,6 +52,10 @@ void clearPixels() {
 void setup() {
     global.epoch.lastSecondEpoch = millis();
     Serial.begin(115200);
+    delay(1000); // Wait for serial to be ready
+    Serial.println("LOG TEST: before LOG_I");
+    LOG_I("MAIN", "LOG TEST: inside LOG_I");
+    Serial.println("LOG TEST: after LOG_I");
     pinMode(PIN_MODE_SWITCH, INPUT_PULLUP);
     readModeSwitch();
     // Initialize NeoPixel strip
@@ -63,28 +71,30 @@ void setup() {
         delay(10);
     }
     delay(2000); // Wait for serial
-    Serial.println("Initializing system...");
+    LOG_I("MAIN", "Initializing system...");
     
     // Initialize sensor pins
-    pinMode(PIN_SENSOR_1, INPUT_PULLUP);
-    pinMode(PIN_SENSOR_2, INPUT_PULLUP);
-    pinMode(PIN_SENSOR_3, INPUT_PULLUP);
-    pinMode(PIN_SENSOR_4, INPUT_PULLUP);
+    // Seesaw sensors (1 & 2) require pull-up
+    pinMode(PIN_SENSOR_1, INPUT_PULLUP); // Seesaw
+    pinMode(PIN_SENSOR_2, INPUT_PULLUP); // Seesaw
+    // Optical sensors (3 & 4) may also use pull-up if open-collector, else adjust as needed
+    pinMode(PIN_SENSOR_3, INPUT_PULLUP); // Optical
+    pinMode(PIN_SENSOR_4, INPUT_PULLUP); // Optical
     
     // Print welcome message
-    Serial.println("\n\n=================================");
-    Serial.println("Filament Sensor by Econode ");
-    Serial.println("=================================");
+    LOG_I("MAIN", "=================================");
+    LOG_I("MAIN", "Filament Sensor by Econode");
+    LOG_I("MAIN", "=================================");
     
     // Print system info
-    Serial.printf("Chip Model: %s\n", ESP.getChipModel());
-    Serial.printf("Chip Revision: %d\n", ESP.getChipRevision());
-    Serial.printf("CPU Frequency: %d MHz\n", ESP.getCpuFreqMHz());
-    Serial.printf("Flash Size: %d MB\n", ESP.getFlashChipSize() / (1024 * 1024));
-    Serial.printf("Free Heap: %d bytes\n", ESP.getFreeHeap());
-    Serial.printf("NeoPixel Pin: GPIO%d\n", NEOPIXEL_PIN);
-    Serial.println("System initialized successfully!");
-    Serial.println("=================================\n");
+    LOG_I("MAIN", "Chip Model: %s", ESP.getChipModel());
+    LOG_I("MAIN", "Chip Revision: %d", ESP.getChipRevision());
+    LOG_I("MAIN", "CPU Frequency: %d MHz", ESP.getCpuFreqMHz());
+    LOG_I("MAIN", "Flash Size: %d MB", ESP.getFlashChipSize() / (1024 * 1024));
+    LOG_I("MAIN", "Free Heap: %d bytes", ESP.getFreeHeap());
+    LOG_I("MAIN", "NeoPixel Pin: GPIO%d", NEOPIXEL_PIN);
+    LOG_I("MAIN", "System initialized successfully!");
+    LOG_I("MAIN", "=================================");
 }
 
 void loop() {
@@ -162,22 +172,29 @@ void loop1second() {
 }
 
 void loop1minute() {
-    Serial.printf("[Minute] System uptime: %lu minutes\n", millis()/60000);
+    LOG_I("MAIN", "[Minute] System uptime: %lu minutes", millis()/60000);
+    Serial.println("1 min....");
 }
 
 void loop15minute() {
-    Serial.println("[15 Min] Periodic system check");
+    LOG_I("MAIN", "[15 Min] Periodic system check");
 }
 
 void loop60minute() {
-    Serial.println("[Hour] Hourly maintenance");
+    LOG_I("MAIN", "[Hour] Hourly maintenance");
 }
 
 void updateSensors(){
-    uint8_t s1_state = digitalRead(PIN_SENSOR_1);
-    uint8_t s2_state = digitalRead(PIN_SENSOR_2);
-    uint8_t s3_state = digitalRead(PIN_SENSOR_3);
-    uint8_t s4_state = digitalRead(PIN_SENSOR_4);
+    // Seesaw sensors (1 & 2) are logic reversed
+    int raw1 = digitalRead(PIN_SENSOR_1);
+    int raw2 = digitalRead(PIN_SENSOR_2);
+    int raw3 = digitalRead(PIN_SENSOR_3);
+    int raw4 = digitalRead(PIN_SENSOR_4);
+    uint8_t s1_state = !raw1; // Seesaw: invert logic
+    uint8_t s2_state = !raw2; // Seesaw: invert logic
+    uint8_t s3_state = raw3;  // Optical: normal logic
+    uint8_t s4_state = raw4;  // Optical: normal logic
+    LOG_D("SENSOR", "S1:%d (raw:%d) S2:%d (raw:%d) S3:%d (raw:%d) S4:%d (raw:%d)", s1_state, raw1, s2_state, raw2, s3_state, raw3, s4_state, raw4);
     uint8_t hasChanged = 0;
     uint8_t alarm,all_off;
     
