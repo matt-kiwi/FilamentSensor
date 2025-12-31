@@ -44,7 +44,7 @@ Adjusting the volume, the underside of the controller has a 2 Watt speaker and v
 
 Some settings are user settable via the serial menu system, you will need to connect a USB-C cable to the internal USB-C port on the Super Mini, then use your favorite terminal program.
 
-Mine is Cool Term by Roger Meiers [](https://freeware.the-meiers.org/)
+Mine is Cool Term by Roger Meiers [https://freeware.the-meiers.org/](https://freeware.the-meiers.org/)
 
 Press enter twice to see menu options.
 
