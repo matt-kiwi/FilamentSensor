@@ -79,6 +79,8 @@ void setup() {
     LOG_I("MAIN", "NeoPixel Pin: GPIO%d", NEOPIXEL_PIN);
     LOG_I("MAIN", "System initialized successfully!");
     LOG_I("MAIN", "=================================");
+    // Load alarm and startup tune from preferences
+    menu_load_alarm_tune();
     // Now show splash screen and menu
     Serial.println(FPSTR(textSplashScreen));
     menu_init();
@@ -92,7 +94,7 @@ void setup() {
     setPixelColor(NEOPIXEL_ALARM, COLOR_PRE_BOOT);
     strip.show();
     // Play startup tune using ESP32-RTTTL
-    rtttl.loadSong("mario:d=4,o=5,b=100:16e6,16e6,16e6,16c6,16e6,16g6,8g");
+    rtttl.loadSong(rtttlTunes[menu_get_startup_tune()].song);
     rtttl.play();
     // Initialize sensor pins
     // Seesaw sensors (1 & 2) require pull-up
