@@ -97,9 +97,8 @@ void setup() {
     // Seesaw sensors (1 & 2) require pull-up
     pinMode(PIN_SENSOR_1, INPUT_PULLUP); // Seesaw
     pinMode(PIN_SENSOR_2, INPUT_PULLUP); // Seesaw
-    // Optical sensors (3 & 4) may also use pull-up if open-collector, else adjust as needed
-    pinMode(PIN_SENSOR_3, INPUT_PULLUP); // Optical
-    pinMode(PIN_SENSOR_4, INPUT_PULLUP); // Optical
+    pinMode(PIN_SENSOR_3, INPUT_PULLUP); // Seesaw
+    pinMode(PIN_SENSOR_4, INPUT_PULLUP); // Seesaw
 }
 
 void loop() {
@@ -215,8 +214,8 @@ void updateSensors(){
     int raw4 = digitalRead(PIN_SENSOR_4);
     uint8_t s1_state = !raw1; // Seesaw: invert logic
     uint8_t s2_state = !raw2; // Seesaw: invert logic
-    uint8_t s3_state = raw3;  // Optical: normal logic
-    uint8_t s4_state = raw4;  // Optical: normal logic
+    uint8_t s3_state = !raw3; //  Seesaw: invert logic
+    uint8_t s4_state = !raw4; // Seesaw: invert logic
     // LOG_D("SENSOR", "S1:%d (raw:%d) S2:%d (raw:%d) S3:%d (raw:%d) S4:%d (raw:%d)", s1_state, raw1, s2_state, raw2, s3_state, raw3, s4_state, raw4);
     uint8_t hasChanged = 0;
     uint8_t alarm,all_off;
