@@ -132,13 +132,23 @@ There is an M10 x 5 Magnet on the underside of the see saw, which biases the wei
 
 Closed IE pulled to ground is the Alarm condition, this is the reverse logic to the optical sensor.
 
+### Assembly of sensor
+
+![](images/seesaw_sensor_base.png)
+
+Install reed switch cable, adjust reed switch postion with trial assemble and set sensitivity / trigger point.
+
+![](images/seesaw_sensor_seesaw.png)
+
+Glue 10mm x 5mm disk magnet into underside of seesaw, and install piviot / axle.
+
 ![](images/Fillament_seasaw_sensor.png)
 
-STL files are here;
+#### STL files are here
 
-[sensor_seesaw_base_top.stl](hardware_seesaw_sensor/sensor_seesaw_base_top.stl) ,
-[sensor_seesaw_base_underside.stl](hardware_seesaw_sensor/sensor_seesaw_base_underside.stl) ,
-[sensor_seesaw_seesaw.stl](hardware_seesaw_sensor/sensor_seesaw_seesaw.stl)
+- [sensor_seesaw_base_top.stl](hardware_seesaw_sensor/sensor_seesaw_base_top.stl)
+- [sensor_seesaw_base_underside.stl](hardware_seesaw_sensor/sensor_seesaw_base_underside.stl)
+- [sensor_seesaw_seesaw.stl](hardware_seesaw_sensor/sensor_seesaw_seesaw.stl)
 
 ## Controller
 
