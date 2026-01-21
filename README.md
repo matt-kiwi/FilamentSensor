@@ -22,6 +22,10 @@ This device is dedicated to Bill and Eva of KiwiFil plastics in New Zealand. And
 - Install switch block assembly aligning sensor cables in combe/clamp.
 - Install top lid
 
+***Note that Siren / 12v Panel use lower 3pin JST for 12v in and Siren out Not shown in picture***
+
+![Siren panel](images/FilamentSensor_SirenConnector.png)
+
 ### Usage
 
 Controller is powered by USB/5v some USB-C PD power supplies may not work.<br/>
@@ -35,10 +39,30 @@ The alarm will sound when any of the sensors fail to detect filament.<br >
 LEDs
 
 - Alarm: Red in alarm, Green no alarm
+- If a 12v Siren is connected it will sound.
 - Sensors 1 - 4: Red in alarm, Green no alarm
 
 Adjusting the volume, the underside of the controller has a 2 Watt speaker and volume control, turn clockwise to increase the volume.
 ![Speaker and volume](images/FilamentSensorControllerUnderSide.png)
+
+## External Alarm / Siren
+
+It was found the small 2w speaker was not loud enough for the factory background noise. So it was decided to attach a external 12volt Siren.
+
+A 12v to 5v power module was added, and a small photo mosfet relay, so the ESP32 can switch on / off a small 12v load.
+The optional siren is external and connected by a RCA/Coax connector.
+
+### Siren 105dB
+
+Siren from SurplusTronics  [Siren Piezo 105 dB 12 Volt DC](https://surplustronics.co.nz/products/4066-siren-piezo-105-db-12-volt-dc)
+
+#### Two sirens with RCA plugs
+
+![Sirens on leads](images/FilamentSirens.png)
+
+#### 12V DC / Siren panel
+
+![Siren panel](images/FilamentSensor_SirenConnector.png)
 
 ## Serial Menu system
 
