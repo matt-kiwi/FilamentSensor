@@ -61,6 +61,8 @@ void clearPixels() {
 #include "splash_screen.h"
 
 void setup() {
+    pinMode(PIN_ALARM_RELAY, OUTPUT);
+    digitalWrite(PIN_ALARM_RELAY, LOW);
     Serial.begin(115200);
     delay(2000);
     // Print welcome message and system info first
@@ -192,6 +194,13 @@ void loop1second() {
     // Update NeoPixels
     strip.show();
     yield();
+
+    // Control alarm relay
+    if (global.sensors.alarm && global.modeSwitch.alarm) {
+        digitalWrite(PIN_ALARM_RELAY, HIGH);
+    } else {
+        digitalWrite(PIN_ALARM_RELAY, LOW);
+    }
 }
 
 void loop1minute() {

@@ -167,6 +167,7 @@ CONNECTIONS:
 - GPIO3 → Speaker Output
 - GPIO2 → NeoPixel Data
 - GPIO5 → Sensor 4 Signal
+- GPIO07 → Alarm / Relay
 - GPIO10 → Sensor 3 Signal
 - GPIO20 → Sensor 1 Signal
 - GPIO21 → Sensor 2 Signal

@@ -5,6 +5,8 @@
 #define PIN_SENSOR_3     10
 #define PIN_SENSOR_4     5
 
+#define PIN_ALARM_RELAY   7
+
 // Alarm threshold in milliseonds, IE delay to start alarm
 #define ALARM_THRESHOLD  3000
 
